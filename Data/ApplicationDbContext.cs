@@ -17,5 +17,7 @@ namespace BestWifiWorkplace.Data
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
+        
+        public DbSet<Workplace> Workplaces { get; set; }
     }
 }
