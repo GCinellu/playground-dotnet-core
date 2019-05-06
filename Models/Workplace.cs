@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Sockets;
 
 namespace BestWifiWorkplace.Models
 {
@@ -17,5 +19,7 @@ namespace BestWifiWorkplace.Models
         [Required]
         [Range(minimum: 1, maximum: 5)]
         public int Rate { get; set; }
+        
+        public List<Review> Reviews { get; set; }
     }
 }

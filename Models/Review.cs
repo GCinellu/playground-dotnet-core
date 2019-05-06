@@ -11,6 +11,6 @@ namespace BestWifiWorkplace.Models
         public Workplace Workplace { get; set; }
         
         public long UserId { get; set; }
-        public IdentityUser User { get; set; }
+        public ApplicationUser User { get; set; }
     }
 }

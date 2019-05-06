@@ -19,5 +19,6 @@ namespace BestWifiWorkplace.Data
         }
         
         public DbSet<Workplace> Workplaces { get; set; }
+        public DbSet<Review> Reviews { get; set; }
     }
 }
