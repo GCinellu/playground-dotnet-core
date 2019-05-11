@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+
+import authService from './../components/api-authorization/AuthorizeService'
+
 import { Link } from 'react-router-dom';
 
 export class Workplaces extends Component {
@@ -6,14 +9,16 @@ export class Workplaces extends Component {
 
     constructor(props) {
         super(props);
-
+        
         this.state = {
             workplaces: [],
+            currentUser: null,
             loading: true
         };
     }
 
     componentDidMount() {
+        this.getUser();
         this.populateWorkplaces();
     }
 
@@ -46,6 +51,8 @@ export class Workplaces extends Component {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
             : Workplaces.renderWorkplacesData(this.state.workplaces);
+            
+        const { currentUser } = this.state
 
         return (
             <div>
@@ -58,11 +65,13 @@ export class Workplaces extends Component {
                     </div>
 
                     <div className="col-2">
-                        <Link to="/workplaces/new">
-                            <button className="btn btn-primary float-right">
-                                Add a Workplace
-                            </button>
-                        </Link>
+                        {currentUser && (
+                            <Link to="/workplaces/new">
+                                <button className="btn btn-primary float-right">
+                                    Add a Workplace
+                                </button>
+                            </Link>
+                        )}
                     </div>
                 </div>
 
@@ -80,5 +89,14 @@ export class Workplaces extends Component {
         const data = await response.json();
         
         this.setState({ workplaces: data, loading: false });
+    }
+    
+    async getUser() {
+        const currentUser = await authService.getUser()
+
+        
+        return !!currentUser 
+        ? this.setState({ currentUser })
+        : null
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -45,6 +46,8 @@ namespace BestWifiWorkplace.Controllers
         [HttpPost]
         public async Task<ActionResult<Workplace>> PostWorkplace(Workplace workplace)
         {
+            workplace.CreatedAt = DateTime.Now;
+            
             _context.Workplaces.Add(workplace);
             await _context.SaveChangesAsync();
 
@@ -56,6 +59,23 @@ namespace BestWifiWorkplace.Controllers
         }
 
         [Authorize]
+        [HttpPost("{id}/reviews")]
+        public async Task<ActionResult<Review>> PostWorkplaceReview(long workplaceId, Review review)
+        {
+            review.CreatedAt = DateTime.Now;
+            review.WorkplaceId = workplaceId;
+
+            _context.Reviews.Add(review);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(
+                nameof(GetWorkplace), 
+                new {id = workplaceId},
+                review
+            );
+        }
+
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> PutWorkplace(long id, Workplace workplace)
         {
@@ -63,6 +83,8 @@ namespace BestWifiWorkplace.Controllers
             {
                 return BadRequest();
             }
+            
+            workplace.UpdatedAt = DateTime.Now;
 
             _context.Entry(workplace).State = EntityState.Modified;
             await _context.SaveChangesAsync();

@@ -23,7 +23,7 @@ export class WorkplacesNew extends Component {
     }
     
     render() {
-        const { workplace, errors } = this.state
+        const { workplace, errors, loading } = this.state
         
         return (
             <div>
@@ -110,7 +110,11 @@ export class WorkplacesNew extends Component {
                         )}
                     </div>
 
-                    <button className="btn btn-success" type="submit">
+                    <button
+                        disabled={loading}    
+                        className="btn btn-success" 
+                        type="submit"
+                    >
                         Save
                     </button>
                 </form>
@@ -146,8 +150,12 @@ export class WorkplacesNew extends Component {
 
         const data = await response.json();
 
-        data.errors
-        ? this.setState({errors: data.errors, loading: false })
-        : this.setState({ workplace: data, loading: false })
+        if (data.errors) {
+          return this.setState({errors: data.errors, loading: false })  
+        }
+        
+        this.setState({ workplace: data, loading: false })
+
+        window.location.href = "/workplaces"
     }
 }

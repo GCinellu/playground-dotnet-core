@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BestWifiWorkplace.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190506212907_AddReviewsForWorkplaces")]
-    partial class AddReviewsForWorkplaces
+    [Migration("20190511170538_AddReviews")]
+    partial class AddReviews
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -67,6 +67,34 @@ namespace BestWifiWorkplace.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("BestWifiWorkplace.Models.Review", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Content");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int>("Rating");
+
+                    b.Property<string>("Title");
+
+                    b.Property<long>("UserId");
+
+                    b.Property<string>("UserId1");
+
+                    b.Property<long>("WorkplaceId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId1");
+
+                    b.HasIndex("WorkplaceId");
+
+                    b.ToTable("Reviews");
+                });
+
             modelBuilder.Entity("BestWifiWorkplace.Models.Workplace", b =>
                 {
                     b.Property<long>("Id")
@@ -75,12 +103,16 @@ namespace BestWifiWorkplace.Data.Migrations
                     b.Property<string>("Address")
                         .IsRequired();
 
+                    b.Property<DateTime>("CreatedAt");
+
                     b.Property<string>("Description");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
                     b.Property<int>("Rate");
+
+                    b.Property<DateTime>("UpdatedAt");
 
                     b.HasKey("Id");
 
@@ -259,6 +291,19 @@ namespace BestWifiWorkplace.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("BestWifiWorkplace.Models.Review", b =>
+                {
+                    b.HasOne("BestWifiWorkplace.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
+
+                    b.HasOne("BestWifiWorkplace.Models.Workplace", "Workplace")
+                        .WithMany("Reviews")
+                        .HasForeignKey("WorkplaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

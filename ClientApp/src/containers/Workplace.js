@@ -15,12 +15,19 @@ export class Workplace extends Component {
 
     componentDidMount() {
         const { id } = this.props.match.params
+        console.log("id", id)
+        
         this.populateWorkplace(id);
     }
 
     static renderWorkplaceData(workplace) {
-        console.log(workplace)
-        const { id, name, description, rate, address } = workplace
+        if (workplace.errors) {
+            // TODO: Handle Errors
+            return null;
+        }
+        
+        const { name, description, rate, address } = workplace
+        
         return (
             <div>
                 <h1>{ name }</h1>
@@ -50,12 +57,24 @@ export class Workplace extends Component {
     }
 
     async populateWorkplace(workplaceId) {
-        const response = await fetch(`api/Workplaces/${workplaceId}`, {
-            headers: {}
-        });
+        try {
+            const response = await fetch(`api/Workplaces/${workplaceId}`, {
+                headers: {}
+            });
 
-        const data = await response.json();
+            const data = await response.json()
+            console.log("data", data)
+
+            
+            this.setState({ workplace: data, loading: false });
+        } catch (error) {
+            console.log("error", error)
+            
+        }
         
-        this.setState({ workplace: data, loading: false });
+
+        
+        
+        
     }
 }
